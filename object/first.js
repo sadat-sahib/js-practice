@@ -60,10 +60,36 @@ copy1.skills.push('React');
 copy1.config.theme = 'light';
 
 // original.name not affected (still "Emma")
-console.log(original.name);
+// console.log(original.name);
 
 // original.skills is affected (length now 3, because "React" was pushed)
-console.log(original.skills.length);
+// console.log(original.skills.length);
 
 // original.config is affected (theme now "light")
-console.log(original.config.theme);
+// console.log(original.config.theme);
+
+
+
+
+// -------------------------------#######------------------------
+
+class EventManager {
+  constructor() {
+    this.listeners = new Map();
+  }
+  
+  addListener(event, callback) {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, new Set());
+    }
+    this.listeners.get(event).add(callback);
+  }
+}
+
+const manager = new EventManager();
+//here if we declare the obj const it will give the type error
+// if we put this class inside another scope it will not give the scope error on let variable 
+// let obj = { name: 'Component' };
+// manager.addListener('click', () => console.log(obj.name));
+// obj = null;
+// console.log(manager.listeners.get('click').size);
