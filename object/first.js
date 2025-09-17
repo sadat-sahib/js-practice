@@ -93,3 +93,28 @@ const manager = new EventManager();
 // manager.addListener('click', () => console.log(obj.name));
 // obj = null;
 // console.log(manager.listeners.get('click').size);
+
+
+
+
+// -------------------------------#######------------------------
+
+function createCounter() {
+  let count = 0;
+  return {
+    increment: () => ++count,
+    decrement: () => --count,
+    getValue: () => count
+  };
+}
+
+const counter1 = createCounter();
+const counter2 = createCounter();
+counter1.increment();
+counter1.increment();
+counter2.increment();
+// console.log(counter1.getValue() + counter2.getValue()); 
+
+
+// -------------------------------#######------------------------
+
