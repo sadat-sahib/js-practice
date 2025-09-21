@@ -50,11 +50,11 @@ const handler2 = createHandler('user-2');
 handler1('clear');
 
 // 7. Log the number of entries still in the cache (only 'user-2' remains → size = 1)
-console.log(cache.size);
+// console.log(cache.size);
 
 // 8. Even after clearing from the cache, the closure still holds a reference
 //    to 'user-1' data, so we can still access it
-console.log(handler1('get').id); // "user-1"
+// console.log(handler1('get').id); // "user-1"
 
 
 // ------------------------------------------------
@@ -76,3 +76,47 @@ console.log(handler1('get').id); // "user-1"
 //   console.log(map.size);        // 1
 //   map.delete('name');
 //   console.log(map.has('name')); // false
+
+
+
+
+//-------------------------------------------------------------
+
+// 1. Create a Map to store loaded modules by name
+const moduleCache = new Map();
+
+async function loadModule(name) {
+  // 2. If the module is already cached, return it immediately
+  if (moduleCache.has(name)) {
+    return moduleCache.get(name);
+  }
+  
+  // 3. Otherwise, simulate loading the module asynchronously
+  //    (like fetching from a server or using dynamic import)
+  const module = await Promise.resolve({
+    default: () => `Module ${name} loaded`,
+    version: '1.0.0'
+  });
+  
+  // 4. Store the loaded module in the cache for future calls
+  moduleCache.set(name, module);
+
+  // 5. Return the newly loaded module
+  return module;
+}
+
+// 6. Create an array to collect the results
+const results = [];
+
+// 7. Load "auth" module for the first time → caches it and pushes its default message
+loadModule('auth').then(m => results.push(m.default()));
+
+// 8. Load "auth" again → this time comes directly from cache and pushes its version
+loadModule('auth').then(m => results.push(m.version));
+
+// 9. Load "utils" module → caches it and pushes its default message
+loadModule('utils').then(m => results.push(m.default()));
+
+// 10. After promises resolve, log the results array
+//     Expected output: "Module auth loaded, 1.0.0, Module utils loaded"
+setTimeout(() => console.log(results.join(', ')), 0);
