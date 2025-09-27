@@ -55,8 +55,33 @@ class StateMachine {
   }
 }
 
-const sm = new StateMachine();
-console.log(sm.transition('start'));
-console.log(sm.state);
-console.log(sm.transition('reset'));
-console.log(sm.state);
+// const sm = new StateMachine();
+// console.log(sm.transition('start'));
+// console.log(sm.state);
+// console.log(sm.transition('reset'));
+// console.log(sm.state);
+
+// ------------------------------------&&&&&&&------------------------------------
+class ValidationError extends Error {
+  constructor(message, code) {
+    super(message);
+    this.name = 'ValidationError';
+    this.code = code;
+  }
+}
+
+function processData(data) {
+  try {
+    if (!data) throw new ValidationError('Data required', 'MISSING_DATA');
+    return data.toUpperCase();
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      console.log(`${error.name}: ${error.message} (${error.code})`);
+    } else {
+      console.log(`Unexpected error: ${error.message}`);
+    }
+  }
+}
+
+processData(null);
+processData(42);
