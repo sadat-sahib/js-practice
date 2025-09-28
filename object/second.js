@@ -30,8 +30,26 @@ const loggedCounter = withLogging(counter);
 const logger = createLogger('INFO');
 
 // First call: increments counter to 1, logs the call, and prints "1".
-console.log(loggedCounter());
+// console.log(loggedCounter());
 
 // Second call: increments counter to 2, logs the call, then passes the result (2)
 // into the logger, which prefixes it with "INFO: " before printing.
-console.log(logger(loggedCounter()));
+// console.log(logger(loggedCounter()));
+
+// ----------------------------$$$$$$$$$$$----------------------------
+const target = { name: 'Sarah', age: 25 };
+const handler = {
+  get(obj, prop) {
+    if (prop === 'toString') {
+      return () => `Person: ${obj.name}`;
+    }
+    return Reflect.get(obj, prop);
+  },
+  has(obj, prop) {
+    return prop !== 'age' && Reflect.has(obj, prop);
+  }
+};
+const proxy = new Proxy(target, handler);
+console.log(proxy.name);
+console.log('age' in proxy);
+console.log(proxy.toString());
