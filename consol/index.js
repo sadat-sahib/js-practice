@@ -23,4 +23,28 @@ const result = Maybe.of(5)
   .map(x => x + 1)
   .map(x => x.toString());
 
-console.log(result.value);
+// console.log(result.value);
+
+//--------------
+class EventManager {
+  constructor() {
+    this.listeners = new Map();
+  }
+  
+  addListener(event, callback) {
+    if (!this.listeners.has(event)) {
+      this.listeners.set(event, new Set());
+    }
+    this.listeners.get(event).add(callback);
+  }
+  
+  removeAllListeners() {
+    this.listeners.clear();
+  }
+}
+
+const manager = new EventManager();
+const obj = { data: new Array(1000).fill('memory') };
+manager.addListener('test', () => obj.data.length);
+manager.removeAllListeners();
+console.log(manager.listeners.size);
